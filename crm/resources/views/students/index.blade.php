@@ -10,6 +10,7 @@
             <thead>
               <th scope="col">#</th>
               <th scope="col">Nombre</th>
+              <th scope="col">Escuela</th>
               <th scope="col">Opciones</th>
             </thead>
             <tbody>
@@ -22,7 +23,14 @@
                     {{ $std->name }}
                   </td>
                   <td>
-                    <a href="{{ route('school.show', $std->id) }}">
+                    @foreach ($schools as $sch)
+                      @if ($std->school_id == $sch->id)
+                        {{ $sch->name }}
+                      @endif
+                    @endforeach
+                  </td>
+                  <td>
+                    <a href="{{ route('student.show', $std->id) }}">
                       <i class="fas fa-info-circle"></i>
                     </a>
                   </td>

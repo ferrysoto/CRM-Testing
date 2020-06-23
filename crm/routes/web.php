@@ -33,4 +33,6 @@ Route::prefix('/school')->name('school.')->middleware('auth')->group(function() 
 Route::prefix('/students')->name('student.')->middleware('auth')->group(function() {
   Route::get('/index', 'StudentsController@index')->name('index');
   Route::get('/show/{id}', 'StudentsController@show')->name('show');
+  Route::post('/update/{id}', 'StudentsController@update')->name('update');
+
 });
