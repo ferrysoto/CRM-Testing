@@ -28,7 +28,9 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        //
+      $schools = School::get();
+
+      return view('students.create', compact('schools'));
     }
 
     /**
@@ -39,7 +41,28 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $validate = $request->validate([
+            'name'      => 'required|max:255',
+            'address'   => 'required|max:255',
+            'born_date' => 'required|date',
+            'born_city' => 'required|max:255',
+            'school_id' => 'required',
+        ]);
+
+        if ($validate) {
+          $is_insert = Student::insert([
+            'name'      => $request['name'],
+            'address'   => $request['address'],
+            'born_date' => $request['born_date'],
+            'born_city' => $request['born_city'],
+            'school_id' => $request['school_id'],
+          ]);
+          if ($is_insert) {
+            return redirect()->route('student.index')->with('success', 'Alumno creado correctamente');
+          }
+        } else {
+          return redirect()->route('student.index')->with('error', 'Comprueba los datos del formulario y vuelve a intentarlo');
+        }
     }
 
     /**
@@ -110,6 +133,12 @@ class StudentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $is_deleted = Student::where('id', $id)->delete();
+
+      if ($is_deleted) {
+        return redirect()->route('student.index')->with('success', 'Alumno eliminado correctamente');
+      } else {
+        return redirect()->route('student.index')->with('error', 'No se ha podido eliminar el alumno seleccionado');
+      }
     }
 }
