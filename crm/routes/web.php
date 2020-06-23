@@ -25,13 +25,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Rutas para escuelas
 Route::prefix('/school')->name('school.')->middleware('auth')->group(function() {
-  Route::get('/index', 'SchoolsController@index')->name('index');
+  Route::get('/', 'SchoolsController@index')->name('index');
   Route::get('/show/{id}', 'SchoolsController@show')->name('show');
+  Route::get('/create', 'SchoolsController@create')->name('create');
+  Route::post('/add', 'SchoolsController@store')->name('store');
+  Route::post('/update/{id}', 'SchoolsController@update')->name('update');
+  Route::post('/remove/{id}', 'SchoolsController@destroy')->name('remove');
 });
 
 // Rutas para estudiantes
 Route::prefix('/students')->name('student.')->middleware('auth')->group(function() {
-  Route::get('/index', 'StudentsController@index')->name('index');
+  Route::get('/', 'StudentsController@index')->name('index');
   Route::get('/show/{id}', 'StudentsController@show')->name('show');
   Route::get('/create', 'StudentsController@create')->name('create');
   Route::post('/add', 'StudentsController@store')->name('store');

@@ -75,8 +75,10 @@ class StudentsController extends Controller
     {
         $student = Student::where('id', $id)->first();
         $schools = School::get();
+        $element = $student;
+        $element->element = 'student';
 
-        return view('students.show', compact('student', 'schools'));
+        return view('students.show', compact('student', 'schools', 'element'));
     }
 
     /**

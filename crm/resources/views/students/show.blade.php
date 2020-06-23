@@ -56,10 +56,10 @@
             </div>
             <button type="submit" class="btn btn-success float-right">Guardar cambios del alumno</button>
           </form>
-          <button type="button" class="btn btn-danger float-left" data-toggle="modal" data-target="#removeStudent">
+          <button type="button" class="btn btn-danger float-left" data-toggle="modal" data-target="#removeModal">
             Borrar ficha del alumno
           </button>
-          @include('students.removeAlertModal')
+          @include('removeAlertModal')
         </div>
       </div>
     </div>
