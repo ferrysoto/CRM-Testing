@@ -26,7 +26,7 @@ class SchoolsController extends Controller
      */
     public function create()
     {
-        //
+        return view('school.create');
     }
 
     /**
@@ -37,7 +37,40 @@ class SchoolsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $validate = $request->validate([
+          'name'      => 'required|max:255',
+          'address'   => 'required|max:255',
+          'email'     => 'required|max:255',
+          'phone'     => 'required|max:11',
+          'image'     => 'required',
+          'web_link'  => 'required',
+        ]);
+
+        if ($validate) {
+          if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path(). '/images/';
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move($path, $filename);
+
+            $is_insert =  School::insert([
+              'name'      => $request['name'],
+              'address'   => $request['address'],
+              'img_name'  => $filename,
+              'email'     => $request['email'],
+              'phone'     => $request['phone'],
+              'web_link'  => $request['web_link'],
+            ]);
+
+          if ($is_insert) {
+            return redirect()->route('school.index')->with('success', 'Colegio modificado correctamente');
+          } else {
+            return redirect()->route('school.index')->with('error', 'Comprueba los datos del formulario y vuelve a intentarlo');
+          }
+        }
+      } else {
+        return redirect()->route('school.index')->with('error', 'Comprueba los datos del formulario y vuelve a intentarlo');
+      }
     }
 
     /**
@@ -78,35 +111,47 @@ class SchoolsController extends Controller
       $validate = $request->validate([
           'name'      => 'required|max:255',
           'address'   => 'required|max:255',
-          'img_name'  => 'required',
           'email'     => 'required|max:255',
           'phone'     => 'required',
           'web_link'  => 'required',
         ]);
 
         if ($validate) {
-          if( $request->hasFile('image')) {
+          if ($request->image == null) {
+            $is_updated =  School::where('id', $id)->update([
+              'name'      => $request['name'],
+              'address'   => $request['address'],
+              'email'     => $request['email'],
+              'phone'     => $request['phone'],
+              'web_link'  => $request['web_link'],
+            ]);
+
+            if ($is_updated) {
+              return back()->with('success', 'Colegio modificado correctamente');
+            }
+
+          } else {
+            if($request->hasFile('image')) {
               $image = $request->file('image');
               $path = public_path(). '/images/';
               $filename = time() . '.' . $image->getClientOriginalExtension();
               $image->move($path, $filename);
 
-              $post->image = $path;
-              $post->save();
-
-              $is_updated =  Student::where('id', $id)->update([
+              $is_updated =  School::where('id', $id)->update([
                 'name'      => $request['name'],
                 'address'   => $request['address'],
-                'img_name'  => $path,
+                'img_name'  => $filename,
                 'email'     => $request['email'],
                 'phone'     => $request['phone'],
                 'web_link'  => $request['web_link'],
               ]);
+
+              if ($is_updated) {
+                return back()->with('success', 'Colegio modificado correctamente');
+              }
+            }
           }
 
-          if ($is_updated) {
-            return back()->with('success', 'Colegio modificado correctamente');
-          }
         } else {
           return back()->with('error', 'Comprueba los datos del formulario y vuelve a intentarlo');
         }

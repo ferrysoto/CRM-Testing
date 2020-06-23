@@ -23,7 +23,7 @@
                 {!! \Session::get('success') !!}
               </div>
             @endif
-          <form action="{{ route('school.update', $school->id) }}" method="post">
+          <form action="{{ route('school.update', $school->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-row">
               <div class="form-group col-md-6">
@@ -51,8 +51,8 @@
                 <input type="text" class="form-control" name="web_link" value="{{ $school->web_link }}" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="img_name">Logotipo</label>
-                <input type="file" class="form-control" name="img_name" value="{{ $school->img_name }}" required>
+                <label for="image">Logotipo</label>
+                <input type="file" class="form-control" name="image">
               </div>
             </div>
             <button type="submit" class="btn btn-success float-right">Guardar cambios</button>
